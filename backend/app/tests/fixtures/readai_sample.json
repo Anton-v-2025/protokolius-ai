@@ -1,0 +1,41 @@
+{
+  "meeting": {
+    "id": "readai_sample_001",
+    "title": "Q2 Budget Review",
+    "start_time": "2026-03-18T10:00:00Z",
+    "end_time": "2026-03-18T11:30:00Z",
+    "duration": 5400,
+    "language": "en",
+    "participants": [
+      { "name": "Anna Smith", "email": "anna@company.com" },
+      { "name": "Bob Lee", "email": "bob@company.com" },
+      { "name": "Carol Zhang", "email": "carol@company.com" }
+    ],
+    "transcript": {
+      "segments": [
+        { "speaker_name": "Anna Smith", "text": "Good morning everyone. Today we're reviewing the Q2 budget." },
+        { "speaker_name": "Bob Lee", "text": "I've prepared the numbers. We're currently at 85% of our Q2 target." },
+        { "speaker_name": "Carol Zhang", "text": "That's good news. What are the main cost drivers?" },
+        { "speaker_name": "Bob Lee", "text": "Engineering headcount is the biggest item. Marketing is under budget." },
+        { "speaker_name": "Anna Smith", "text": "Great. Bob, can you prepare the full budget draft by Friday?" },
+        { "speaker_name": "Bob Lee", "text": "Absolutely, I'll have it ready." },
+        { "speaker_name": "Anna Smith", "text": "Carol, can you share it with stakeholders by end of next week?" },
+        { "speaker_name": "Carol Zhang", "text": "Sure, I'll handle that." }
+      ]
+    },
+    "notes": "Q2 Budget Review Meeting\n\n- Team is at 85% of Q2 target\n- Engineering headcount is primary cost driver\n- Marketing spend is under budget\n- Bob to prepare full budget draft\n- Carol to distribute to stakeholders",
+    "summary": "The team reviewed Q2 financial performance (85% of target). Key cost driver is engineering headcount. Bob will prepare the full budget draft by Friday; Carol will distribute to stakeholders by end of next week.",
+    "action_items": [
+      {
+        "text": "Prepare full Q2 budget draft",
+        "assignee": "Bob Lee",
+        "due_date": "2026-03-22"
+      },
+      {
+        "text": "Share budget with stakeholders",
+        "assignee": "Carol Zhang",
+        "due_date": "2026-03-27"
+      }
+    ]
+  }
+}
