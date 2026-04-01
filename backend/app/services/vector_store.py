@@ -101,7 +101,7 @@ class VectorStore:
         scored = []
         for chunk in all_chunks:
             emb = chunk.embedding
-            if not emb or not isinstance(emb, list):
+            if emb is None or (hasattr(emb, '__len__') and len(emb) == 0):
                 continue
             dot = sum(a * b for a, b in zip(query_embedding, emb))
             e_norm = math.sqrt(sum(x * x for x in emb)) or 1.0

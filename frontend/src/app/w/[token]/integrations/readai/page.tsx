@@ -80,7 +80,7 @@ export default function ReadAIIntegration() {
           )}
 
           <div className="glass-card p-5">
-            <div className="flex items-center justify-between mb-3">
+            <div className="flex items-center justify-between mb-1">
               <p className="text-sm font-semibold" style={{ color: "var(--text-primary)" }}>Секрет вебхука</p>
               <button
                 onClick={handleGenerate}
@@ -92,6 +92,9 @@ export default function ReadAIIntegration() {
                 Сгенерировать новый
               </button>
             </div>
+            <p className="text-xs mb-3" style={{ color: "var(--text-tertiary)" }}>
+              Скопируйте этот ключ и вставьте в Read AI → Settings → Webhooks → Signing Secret
+            </p>
             <input
               className="input-base font-mono text-sm mb-4"
               value={secret}
@@ -108,9 +111,9 @@ export default function ReadAIIntegration() {
             style={{ color: "var(--text-secondary)" }}
           >
             <p className="font-bold" style={{ color: "var(--text-primary)" }}>Как это работает</p>
-            <p>1. Read AI отправляет POST-запрос на ваш URL после каждой встречи</p>
-            <p>2. Мы проверяем HMAC-SHA256 подпись с помощью вашего секрета</p>
-            <p>3. Встреча парсится, нормализуется, индексируется и сохраняется в Drive</p>
+            <p>1. После каждой встречи Read AI автоматически отправляет запись сюда</p>
+            <p>2. Секрет вебхука подтверждает, что данные пришли именно от вашего Read AI</p>
+            <p>3. Мы извлекаем ключевое из встречи и сохраняем — всё доступно через поиск и ИИ</p>
           </div>
         </div>
       </div>
