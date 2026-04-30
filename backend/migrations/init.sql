@@ -12,6 +12,7 @@ CREATE TABLE IF NOT EXISTS companies (
     company_slug    TEXT NOT NULL UNIQUE,
     api_key         TEXT NOT NULL UNIQUE DEFAULT encode(gen_random_bytes(32), 'hex'),
     workspace_token TEXT UNIQUE DEFAULT encode(gen_random_bytes(12), 'hex'),
+    workspace_pin_hash VARCHAR(256),
     is_active       BOOLEAN NOT NULL DEFAULT true,
     plan            TEXT NOT NULL DEFAULT 'trial',
     created_at      TIMESTAMPTZ NOT NULL DEFAULT NOW(),

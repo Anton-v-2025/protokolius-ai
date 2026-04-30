@@ -7,15 +7,26 @@ import { ArrowRight, Building2, Lock, CheckCircle, Copy, ExternalLink } from "lu
 import { motion, AnimatePresence } from "framer-motion";
 import { useCreateCompany } from "@/lib/hooks/useCompany";
 
+const TRANSLIT: Record<string, string> = {
+  а: "a", б: "b", в: "v", г: "g", д: "d", е: "e", ё: "e", ж: "zh", з: "z",
+  и: "i", й: "y", к: "k", л: "l", м: "m", н: "n", о: "o", п: "p", р: "r",
+  с: "s", т: "t", у: "u", ф: "f", х: "h", ц: "ts", ч: "ch", ш: "sh", щ: "sch",
+  ъ: "", ы: "y", ь: "", э: "e", ю: "yu", я: "ya",
+};
+
 function slugify(name: string): string {
-  return name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 50);
+  const transliterated = name
+    .toLowerCase()
+    .split("")
+    .map((ch) => (ch in TRANSLIT ? TRANSLIT[ch] : ch))
+    .join("");
+  return transliterated.replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 50);
 }
 
 export default function SetupCompany() {
   const router = useRouter();
   const [name, setName] = useState("");
   const [slug, setSlug] = useState("");
-  const [slugEdited, setSlugEdited] = useState(false);
   const [pin, setPin] = useState("");
   const [pinConfirm, setPinConfirm] = useState("");
   const { mutateAsync, isPending } = useCreateCompany();
@@ -28,7 +39,7 @@ export default function SetupCompany() {
 
   const handleNameChange = (v: string) => {
     setName(v);
-    if (!slugEdited) setSlug(slugify(v));
+    setSlug(slugify(v));
   };
 
   const pinMismatch = pin.length > 0 && pinConfirm.length > 0 && pin !== pinConfirm;
@@ -117,14 +128,6 @@ export default function SetupCompany() {
               </div>
             </div>
 
-            {/* Webhook URL */}
-            <div className="rounded-xl p-4 text-xs" style={{ background: "var(--surface-2)", border: "1px solid var(--surface-border)" }}>
-              <p className="font-semibold mb-1" style={{ color: "var(--text-secondary)" }}>Webhook для Read AI</p>
-              <p className="font-mono break-all" style={{ color: "var(--brand-400)" }}>
-                {apiUrl}/webhook/readai/{slug}
-              </p>
-            </div>
-
             {/* Continue button */}
             <button
               onClick={() => router.push(`/w/${workspaceToken}/integrations`)}
@@ -176,27 +179,17 @@ export default function SetupCompany() {
                 />
               </div>
 
-              <div>
-                <label className="block text-sm font-semibold mb-2" style={{ color: "var(--text-secondary)" }}>
-                  ID рабочего пространства (slug)
-                </label>
-                <input
-                  className="input-base font-mono text-sm"
-                  placeholder="acme"
-                  value={slug}
-                  onChange={(e) => { setSlug(e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, "")); setSlugEdited(true); }}
-                  required
-                  title="Строчные буквы, цифры и дефисы, 3–50 символов"
-                />
-                <p className="mt-1.5 text-xs" style={{ color: "var(--text-tertiary)" }}>
-                  Используется в URL вебхука Read AI
-                </p>
-              </div>
-
               {slug && (
-                <div className="rounded-xl p-3.5 text-xs font-mono break-all" style={{ background: "var(--surface-2)", border: "1px solid var(--surface-border)" }}>
-                  <span style={{ color: "var(--text-tertiary)" }}>Вебхук: </span>
-                  <span style={{ color: "var(--brand-400)" }}>{apiUrl}/webhook/readai/{slug}</span>
+                <div className="rounded-xl p-3.5 space-y-1.5" style={{ background: "var(--surface-2)", border: "1px solid var(--surface-border)" }}>
+                  <p className="text-xs font-semibold" style={{ color: "var(--text-secondary)" }}>
+                    Webhook для Read AI
+                  </p>
+                  <p className="text-xs font-mono break-all" style={{ color: "var(--brand-400)" }}>
+                    {apiUrl}/webhook/readai/{slug}
+                  </p>
+                  <p className="text-xs" style={{ color: "var(--text-tertiary)" }}>
+                    Используется в Read AI для приёма транскриптов встреч
+                  </p>
                 </div>
               )}
 
