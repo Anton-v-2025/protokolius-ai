@@ -2,20 +2,19 @@
 
 import { useState, useEffect } from "react";
 import { toast } from "sonner";
-import { Webhook, RefreshCw, ChevronLeft } from "lucide-react";
+import { Webhook, ChevronLeft } from "lucide-react";
 import Link from "next/link";
 import { StatusBadge } from "@/components/common/StatusDot";
 import { CodeBlock } from "@/components/common/CopyButton";
 import { useWorkspacePrefix } from "@/lib/hooks/useWorkspace";
 import { useCompany } from "@/lib/hooks/useCompany";
-import { useIntegrations, useUpdateReadAI, useGenerateReadAISecret } from "@/lib/hooks/useIntegrations";
+import { useIntegrations, useUpdateReadAI } from "@/lib/hooks/useIntegrations";
 
 export default function ReadAIIntegration() {
   const { link } = useWorkspacePrefix();
   const { data: company } = useCompany();
   const { data: integrations } = useIntegrations();
   const { mutateAsync: update, isPending } = useUpdateReadAI();
-  const { mutateAsync: generate, isPending: generating } = useGenerateReadAISecret();
   const [secret, setSecret] = useState("");
 
   useEffect(() => {
@@ -30,16 +29,6 @@ export default function ReadAIIntegration() {
       toast.success("Настройки Read AI сохранены");
     } catch {
       toast.error("Не удалось сохранить");
-    }
-  };
-
-  const handleGenerate = async () => {
-    try {
-      const data = await generate();
-      setSecret(data.webhook_secret);
-      toast.success("Новый секрет сгенерирован");
-    } catch {
-      toast.error("Ошибка генерации");
     }
   };
 
@@ -80,26 +69,15 @@ export default function ReadAIIntegration() {
           )}
 
           <div className="glass-card p-5">
-            <div className="flex items-center justify-between mb-1">
-              <p className="text-sm font-semibold" style={{ color: "var(--text-primary)" }}>Секрет вебхука</p>
-              <button
-                onClick={handleGenerate}
-                disabled={generating}
-                className="flex items-center gap-1.5 text-xs font-semibold transition-opacity hover:opacity-75"
-                style={{ color: "var(--brand-400)" }}
-              >
-                <RefreshCw size={12} className={generating ? "animate-spin" : ""} />
-                Сгенерировать новый
-              </button>
-            </div>
+            <p className="text-sm font-semibold mb-1" style={{ color: "var(--text-primary)" }}>Signing Secret из Read AI</p>
             <p className="text-xs mb-3" style={{ color: "var(--text-tertiary)" }}>
-              Скопируйте этот ключ и вставьте в Read AI → Settings → Webhooks → Signing Secret
+              В Read AI → Settings → Webhooks скопируйте Signing Secret и вставьте сюда
             </p>
             <input
               className="input-base font-mono text-sm mb-4"
               value={secret}
               onChange={(e) => setSecret(e.target.value)}
-              placeholder="Введите или сгенерируйте секрет вебхука"
+              placeholder="Вставьте Signing Secret из Read AI"
             />
             <button onClick={handleSave} disabled={isPending} className="btn-primary w-full py-2.5 text-sm">
               {isPending ? "Сохранение..." : "Сохранить настройки"}

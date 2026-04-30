@@ -1,36 +1,20 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { ArrowRight, Webhook, RefreshCw } from "lucide-react";
+import { ArrowRight, Webhook } from "lucide-react";
 import { CodeBlock } from "@/components/common/CopyButton";
 import { useCompany } from "@/lib/hooks/useCompany";
-import { useGenerateReadAISecret, useUpdateReadAI } from "@/lib/hooks/useIntegrations";
+import { useUpdateReadAI } from "@/lib/hooks/useIntegrations";
 
 export default function SetupReadAI() {
   const router = useRouter();
   const { data: company } = useCompany();
-  const { mutateAsync: generate, data: generatedData, isPending: generating } = useGenerateReadAISecret();
   const { mutateAsync: save, isPending: saving } = useUpdateReadAI();
   const [secret, setSecret] = useState("");
 
-  useEffect(() => {
-    if (generatedData?.webhook_secret) {
-      setSecret(generatedData.webhook_secret);
-    }
-  }, [generatedData]);
-
   const webhookUrl = company?.webhook_url || "";
-
-  const handleGenerate = async () => {
-    try {
-      await generate();
-      toast.success("Секрет сгенерирован");
-    } catch {
-      toast.error("Ошибка генерации секрета");
-    }
-  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -70,9 +54,8 @@ export default function SetupReadAI() {
         </p>
         <ol className="space-y-1.5 text-sm" style={{ color: "var(--text-secondary)" }}>
           <li>1. Скопируйте URL вебхука ниже</li>
-          <li>2. В Read AI → Настройки → Вебхуки вставьте этот URL</li>
-          <li>3. Сгенерируйте секрет и вставьте его в поле секрета вебхука Read AI</li>
-          <li>4. Сохраните в Read AI и продолжайте здесь</li>
+          <li>2. В Read AI → Settings → Webhooks вставьте этот URL и сохраните</li>
+          <li>3. Read AI покажет Signing Secret — скопируйте его и вставьте в поле ниже</li>
         </ol>
       </div>
 
@@ -87,29 +70,17 @@ export default function SetupReadAI() {
         )}
 
         <div>
-          <div className="flex items-center justify-between mb-2">
-            <label className="text-sm font-semibold" style={{ color: "var(--text-secondary)" }}>
-              Секрет вебхука
-            </label>
-            <button
-              type="button"
-              onClick={handleGenerate}
-              disabled={generating}
-              className="flex items-center gap-1.5 text-xs font-semibold transition-opacity hover:opacity-75"
-              style={{ color: "var(--brand-400)" }}
-            >
-              <RefreshCw size={12} className={generating ? "animate-spin" : ""} />
-              Сгенерировать новый
-            </button>
-          </div>
+          <label className="block text-sm font-semibold mb-2" style={{ color: "var(--text-secondary)" }}>
+            Signing Secret из Read AI
+          </label>
           <input
             className="input-base font-mono text-sm"
-            placeholder="Введите секрет или сгенерируйте выше"
+            placeholder="Вставьте Signing Secret из Read AI"
             value={secret}
             onChange={(e) => setSecret(e.target.value)}
           />
           <p className="mt-1.5 text-xs" style={{ color: "var(--text-tertiary)" }}>
-            Используется для проверки подлинности вебхука. Держите в секрете.
+            Используется для проверки подлинности вебхука.
           </p>
         </div>
 
