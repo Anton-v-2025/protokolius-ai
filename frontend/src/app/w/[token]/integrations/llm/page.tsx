@@ -56,7 +56,10 @@ export default function LLMIntegration() {
     try {
       await handleSave();
       const r = await test();
-      setTestResult({ ok: r.status === "connected", msg: r.response || r.error || "" });
+      setTestResult({
+        ok: r.status === "connected",
+        msg: r.status === "connected" ? "Подключено. Модель отвечает." : (r.error || "Тест не прошёл"),
+      });
     } catch {
       setTestResult({ ok: false, msg: "Тест не прошёл" });
     }

@@ -32,7 +32,10 @@ export default function SetupLLM() {
     try {
       await save({ llm_provider: provider, llm_model: model, llm_api_key: apiKey, llm_base_url: baseUrl, llm_embedding_model: embeddingModel, assistant_prompt: assistantPrompt });
       const result = await test();
-      setTestResult({ ok: result.status === "connected", msg: result.response || result.error || "" });
+      setTestResult({
+        ok: result.status === "connected",
+        msg: result.status === "connected" ? "Подключено. Модель отвечает." : (result.error || "Тест не прошёл"),
+      });
     } catch {
       setTestResult({ ok: false, msg: "Тест не прошёл" });
     }
