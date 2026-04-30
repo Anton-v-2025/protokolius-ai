@@ -191,7 +191,7 @@ async def google_drive_callback(
     integration.google_drive_enabled = True
     await db.commit()
 
-    return RedirectResponse(url=f"{settings.FRONTEND_URL}/integrations/drive?connected=true")
+    return RedirectResponse(url=f"{settings.FRONTEND_URL}/w/{company.workspace_token}/integrations/drive?connected=true")
 
 
 @router.patch("/llm", response_model=IntegrationResponse)
